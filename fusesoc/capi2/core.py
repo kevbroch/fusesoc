@@ -265,6 +265,26 @@ class Core:
 
         return hooks
 
+    """ Get flags, including tool, from target """
+
+    def get_flags(self, target_name):
+        flags = {}
+        target = self.targets.get(target_name)
+
+        if target:
+            for flag in target.flags:
+                if flag[0] == "+":
+                    flags[flag[1:]] = True
+                elif flag[0] == "-":
+                    flags[flag[1:]] = False
+                else:
+                    flags[flag] = True
+
+            # Special case for tool as we get it from default_tool
+            if target.default_tool:
+                flags["tool"] = str(target.default_tool)
+        return flags
+
     def get_scripts(self, files_root, flags):
         self._debug("Getting hooks for flags '{}'".format(str(flags)))
         hooks = {}
@@ -771,6 +791,9 @@ Target:
     - name : filesets
       type : StringWithUseFlags
       desc : File sets to use in target
+    - name : flags
+      type : String
+      desc : Default values of flags
     - name : generate
       type : StringWithUseFlagsOrDict
       desc : Parameterized generators to run for this target with optional parametrization
