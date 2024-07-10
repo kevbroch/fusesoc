@@ -6,3 +6,4 @@ pre-commit>=2.9.0
 # not needed.
 pytest>=3.3.0
 tox
+zipp>=3.19.1 # not directly required, pinned by Snyk to avoid a vulnerability
